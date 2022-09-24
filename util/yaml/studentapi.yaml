@@ -1,0 +1,229 @@
+openapi: "3.0.3"
+info:
+  title: college
+  description: this api is  for student portal
+  version: 1.0
+  contact:
+    email: ismailbohra99@gmail.com
+  servers:
+    -url: http://localhost:5000/
+    description: this is local server
+schemes: [http,https]
+
+paths:
+  /student:
+    get:
+      summary: Return json objects of students
+      descriptions: it return objects
+      responses:
+        200:
+          descriptions: Success
+          schema:
+            type: array
+            items:
+              type: object
+
+  /student/{userId}:
+    get:
+      summary: Returns a student by ID.
+      description: Returns the Specific User
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type : integer
+            format: int64
+        # - name: Authorization
+        #   in: header
+        #   required: true
+        #   schema:
+        #     type : string
+      responses: 
+        '200':
+          description: OK
+
+  /student/student/uploadImage:
+    get:
+      summary: Return html page for uploading images
+      descriptions: it return objects
+      responses:
+        200:
+          descriptions: Success
+
+  /student/createStudent:
+    post:
+      summary: Return json objects of students
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - computercode
+                - password
+                - enrollment
+                
+              properties:
+                name:
+                  type: string
+                computer_code:
+                  type: integer
+                password:
+                  type: string
+                enrollment:
+                  type: string
+                email:
+                  type: string
+                dob:
+                  type: integer      
+      responses:
+        '200':
+          description: OK
+
+  /student/delete/{userId}:
+    delete:
+      summary: delete object from table
+      description: delete the Specific User
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type : integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type : string    
+      responses: 
+        '200':
+          description: OK
+  
+  /student/update/{id}:
+    put:
+      summary: Return json objects of students
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type : integer
+            format: int64
+        - in: body
+          name: body
+          schema:
+            type: object
+            required:
+              - name
+              - computercode
+              - password
+              - enrollment
+              
+            properties:
+              name:
+                type: string
+              computer_code:
+                type: integer
+              password:
+                type: string
+              enrollment:
+                type: string
+              email:
+                type: string
+              dob:
+                type: integer      
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+                   
+  /student/student/uploadImage2:
+     post:
+      tags:
+        - Upload
+      summary: Upload Image of student
+      consumes:
+        - multipart/form-data
+      parameters:
+         - in: formData
+           name: image
+           type: file
+           required: true
+           description: The file to upload.
+      requestBody:
+        content:
+          image/png:
+            schema:
+              type: file
+              name: image
+              format: binary
+        
+      responses:
+        200:
+          description: Successful Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error
+ 
+  /student/authenticate:
+     post:
+      tags:
+        - Auth
+      summary: authorization
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - computercode
+                - dob
+            
+              properties:
+                computer_code:
+                  type: integer
+                dob:
+                  type: integer      
+        
+      responses:
+        200:
+          description: Successful Response
+        400:
+          description: User Error
+        500:
+          description: Internal Server Error        
+
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+
+security:
+ - Bearer: []
+
+securityDefinition:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: Authorization
